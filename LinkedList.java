@@ -1,88 +1,141 @@
-package linked_list;
-// insertAt()
-// insertAtIndex()
-//delete()
-//show()
+package dsa.LinkedList;
 
-public class Node {
-    int data;
+class Node {
+
+    int value;
     Node next;
+
+    public Node(int value) {
+        this.value = value;
+
+    }
 }
+
 public class LinkedList {
-    //node object
+
     Node head;
+    Node tail;
+    int length;
+    // constructor to creat new Linked List 
 
-    public void insert(int data) {
-        // create a new node
-        Node new_node = new Node();
-        // assign value to the new node
-        new_node.data = data;
+    public LinkedList() {
+    }
 
-        // if list is empty
-        if (head == null) {
-            head = new_node;
-        }
-        //if node is not empty ->
-        else {
-            Node n = head;
+    public LinkedList(int value) {
+        Node newNode = new Node(value);
+        head = newNode;
+        tail = newNode;
+        length = 1;
+    }
 
-            while (n.next != null) {
-                n = n.next;
-            }
-            n.next = new_node;
+    public void printList() {
+        Node temp = head;
+        while (temp != null) {
+            System.out.println(temp.value);
+            temp = temp.next;
         }
     }
 
-    public void insertAtStart(int data) {
-        Node new_node = new Node();
-        // assign value to the new node
-        new_node.data = data;
-
-        //head: new_node -> node_1
-        new_node.next = head;
-        head = new_node;
-    }
-    // index
-    public void insertAt(int index, int data) {
-        Node new_node = new Node();
-        new_node.data = data;
-        if (index == 0){
-            insertAtStart(data);
+    public void append(int value) {
+        Node newNode = new Node(value);
+        if (length == 0) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
         }
-        else{
-            Node n = head;
-
-            for (int i = 0; i < index-1; i++) {
-                n = n.next;
-            }
-            // replace
-            new_node.next = n.next;
-            n.next = new_node;
-        }
-    }
-    public void remove(int index){
-        if (index ==0){
-            head = head.next;
-        }
-        else{
-            Node n = head;
-            Node delete_node = null;
-            for (int i =0 ; i < index-1; i++){
-                n = n.next;
-            }
-            delete_node = n.next;
-            n.next = delete_node.next;
-            //remove from memory
-            delete_node = null;
-        }
-    }
-    public void show() {
-        Node node = head;
-        while (node.next != null) {
-            System.out.println(node.data);
-            node = node.next;
-        }
-        System.out.println(node.data);
+        length++;
     }
 
+    public void prepend(int value) {
+        Node newNode = new Node(value);
+        if (length == 0) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            newNode.next = head;
+            head = newNode;
+        }
+        length++;
+    }
+
+    public Node removeLast() {
+        if (length == 0) {
+            return null;
+        }
+        Node temp = head;
+        Node pre = head;
+        while (temp.next != null) {
+            pre = temp;
+            temp = temp.next;
+        }
+        pre.next = null;
+        tail = pre;
+        length--;
+
+        // if there is one element in the linked list 
+        if (length == 0) {
+            head = null;
+            tail = null;
+        }
+        // return the removed element 
+        return temp;
+    }
+
+    public Node removeFirst() {
+        if (length == 0) {
+            return null;
+        }
+        Node temp = head;
+        head = head.next;
+        temp.next = null;
+        length--;
+        if (length == 0) {
+            head = null;
+            tail = null;
+        }
+        return temp;
+    }
+
+    public Node get(int index) {
+        // boundary condition 
+        if (index < 0 || index >= length) {
+            return null;
+        }
+        Node temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp.next;
+        }
+        return temp;
+    }
+
+    public boolean set(int index, int value) {
+        Node temp = get(index);
+        if (temp != null) {
+            temp.value = value;
+            return true;
+        }
+        return false;
+    }
+
+    boolean insert(int index, int value) {
+        if (index < 0 || index > length){
+            return false; 
+        }
+        if (index == 0) {
+            prepend(value);
+            return true;
+        }
+        if (index == length) {
+            append(value);
+            return true;
+        }
+        Node newNode = new Node(value);
+        Node temp = get(index - 1);
+        newNode.next = temp.next;
+        temp.next = newNode;
+        length++;
+        return true;
+    }
 }
