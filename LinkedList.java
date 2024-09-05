@@ -11,6 +11,15 @@ class Node {
     }
 }
 
+//printList()
+//append(int value)
+//prepend(int value)
+//removeLast()
+//removeFirst()
+//get(int index)
+//set(int index, int value)
+//insert(int index, int value)
+
 public class LinkedList {
 
     Node head;
