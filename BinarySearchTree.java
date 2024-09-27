@@ -1,26 +1,22 @@
 package Tree;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class BinarySearchTree {
 
-    Node root;
+    public Node root;
 
-    class Node {
+    public static class Node {
 
-        int value;
-        Node left;
-        Node right;
+        public int value;
+        public Node left;
+        public Node right;
 
-        Node(int value) {
+        private Node(int value) {
             this.value = value;
         }
-    }
-
-    public BinarySearchTree() {
-    }
-
-    public BinarySearchTree(int value) {
-        Node newNode = new Node(value);
-        root = newNode;
     }
 
     public boolean insert(int value) {
@@ -40,7 +36,6 @@ public class BinarySearchTree {
                     return true;
                 }
                 temp = temp.left;
-
             } else {
                 if (temp.right == null) {
                     temp.right = newNode;
@@ -48,11 +43,13 @@ public class BinarySearchTree {
                 }
                 temp = temp.right;
             }
-
         }
     }
 
-    public boolean contain(int value) {
+    public boolean contains(int value) {
+        if (root == null) {
+            return false;
+        }
         Node temp = root;
         while (temp != null) {
             if (value < temp.value) {
@@ -65,4 +62,96 @@ public class BinarySearchTree {
         }
         return false;
     }
+
+    public ArrayList<Integer> BFS() {
+        Node currentNode = root;
+        Queue<Node> queue = new LinkedList<>();
+        ArrayList<Integer> results = new ArrayList<>();
+        queue.add(currentNode);
+
+        while (queue.size() > 0) {
+            currentNode = queue.remove();
+            results.add(currentNode.value);
+            if (currentNode.left != null) {
+                queue.add(currentNode.left);
+            }
+            if (currentNode.right != null) {
+                queue.add(currentNode.right);
+            }
+        }
+        return results;
+    }
+
+    // depth first search - preorder : root - left - right
+    public ArrayList<Integer> DFSPreorder() {
+        ArrayList<Integer> results = new ArrayList<>();
+        class Traverse {
+
+            Traverse(Node currentNode) {
+                results.add(currentNode.value);
+                if (currentNode.left != null) {
+                    new Traverse(currentNode.left);
+                }
+                if (currentNode.right != null) {
+                    new Traverse(currentNode.right);
+                }
+            }
+        }
+        new Traverse(root);
+        return results;
+    }
+
+    public ArrayList<Integer> DFSPostorder() {
+        ArrayList<Integer> results = new ArrayList<>();
+        class Traverse {
+
+            Traverse(Node currentNode) {
+                if (currentNode.left != null) {
+                    new Traverse(currentNode.left);
+                }
+                if (currentNode.right != null) {
+                    new Traverse(currentNode.right);
+                }
+                results.add(currentNode.value);
+            }
+        }
+        new Traverse(root);
+        return results;
+    }
+
+    public ArrayList<Integer> DFSInorder() {
+        ArrayList<Integer> results = new ArrayList<>();
+        class Traverse {
+
+            Traverse(Node currentNode) {
+                if (currentNode.left != null) {
+                    new Traverse(currentNode.left);
+                }
+                results.add(currentNode.value);
+
+                if (currentNode.right != null) {
+                    new Traverse(currentNode.right);
+                }
+            }
+        }
+        new Traverse(root);
+        return results;
+    }
+
+    public int findMaxBST() {
+        Node currentNode = root;
+        while (currentNode.left != null) {
+            currentNode = currentNode.left;
+        }
+        return currentNode.value;
+    }
+
+    public int findMinBST() {
+        Node currentNode = root;
+        while (currentNode.right != null) {
+            currentNode = currentNode.right;
+        }
+        return currentNode.value;
+    }
+
 }
